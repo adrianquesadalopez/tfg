@@ -31,7 +31,7 @@ class MyModComments extends Module
 			Configuration::updateValue('MYMOD_COMMENTS', $enable_comments);
 			$this->context->smarty->assign('confirmation', 'ok'); //mensaje de confirmacion
 		}
-	 	asdfadsf
+	 	
 	 }
 	 public function assignConfiguration()// damos los valores de configuracion a las variables del .tpl
 	{
