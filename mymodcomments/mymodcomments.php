@@ -21,6 +21,30 @@ class MyModComments extends Module
 		 $this->registerHook('displayProductTabContent'); //registerHOOK necesita el id del modulo, por eso se llama primero a install
 		 return true;
 	}
+
+	public function processConfiguration(){ //comprovamos si el boton de enviar ha sido clickado
+	 	if (Tools::isSubmit('mymod_pc_form')) //boton de enviar(submit) , issubmit mira si la clave 
+		{
+			$enable_grades = Tools::getValue('enable_grades'); //recupera la información de la clave pasada en el parametro
+			$enable_comments = Tools::getValue('enable_comments');//ídem
+			Configuration::updateValue('MYMOD_GRADES', $enable_grades); //guarda la configuración en la tabla de configuraciones, primero la clave y el parametro
+			Configuration::updateValue('MYMOD_COMMENTS', $enable_comments);
+			$this->context->smarty->assign('confirmation', 'ok'); //mensaje de confirmacion
+		}
+	 	
+	 }
+	 public function assignConfiguration()// damos los valores de configuracion a las variables del .tpl
+	{
+		 $enable_grades = Configuration::get('MYMOD_GRADES');
+		 $enable_comments = Configuration::get('MYMOD_COMMENTS');
+		 $this->context->smarty->assign('enable_grades', $enable_grades);
+		 $this->context->smarty->assign('enable_comments',$enable_comments);
+	}
+	 public function getContent(){ //llama a las dos rutinas anteriores y muestra el getContent.tpl, es el unico metodo que prestashop llama cuando entramos en la configuracion de un modulo, el retorno sera el contenido mostrado en la pantalla
+	 	$this->processConfiguration();
+	 	$this->assignConfiguration();
+	 	return $this->display(__FILE__,'getContent.tpl');
+	 }
 	
 	 
 }
