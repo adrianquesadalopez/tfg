@@ -8,24 +8,26 @@
  <strong>Grade:</strong> {$comment.grade}/5<br>
  </p><br>
  {/foreach}
-</div> 
-<div class="rte">
  <form action="" method="POST" id="comment-form">
+ {if $enable_grades eq 1}
  <div class="form-group">
  <label for="grade">Grade:</label>
  <div class="row">
  <div class="col-xs-4">
- <input id="grade" name="grade" value="0" type="number"
+ <input id="grade" name="grade" type="number"
  class="rating" min="0" max="5" step="1" data-size="sm" >
  </select>
  </div>
  </div>
  </div>
+ {/if}
+  {if $enable_comments eq 1}
  <div class="form-group">
  <label for="comment">Comment:</label>
  <textarea name="comment" id="comment" class="form-
  control"></textarea>
  </div>
+  {/if}
  <div class="submit">
  <button type="submit" name="mymod_pc_submit_comment"
  class="button btn btn-default button-medium">
