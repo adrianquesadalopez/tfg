@@ -9,12 +9,30 @@
  </p><br>
  {/foreach}
  <form action="" method="POST" id="comment-form">
+  <div class="form-group">
+ <label for="firstname">{l s='Nombre:' mod='mymodcomments'}</label>
+ <div class="row">
+ <div class="col-xs-4">
+ <input id="name" name="name" type="text"
+ class="form-control">
+ </div>
+ </div>
+ </div>
+<div class="form-group">
+ <label for="lastname">{l s='Apellido/s:' mod='mymodcomments'}</label>
+ <div class="row">
+ <div class="col-xs-4">
+ <input id="lastname" name="lastname" type="text"
+ class="form-control">
+ </div>
+ </div>
+ </div>
  {if $enable_grades eq 1}
  <div class="form-group">
  <label for="grade">{l s='Valoración:' mod='mymodcomments'}</label>
  <div class="row">
  <div class="col-xs-4">
- <input id="grade" name="grade" type="number"
+ <input id="grade" name="grade" value="5" type="number"
  class="rating" min="0" max="5" step="1" data-size="sm">
  </select>
  </div>

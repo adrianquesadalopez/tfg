@@ -12,9 +12,33 @@ class MyModComments extends Module
 		 $this->displayName = $this->l('Comentarios y valoraciones de productos');
 		 $this->description = $this->l('Con este modulo los clientes podran valorar y ratificar 
 		 los productos para dar una mayor credibilidad a tu negocio');
+		 $this->ps_versions_compliancy = array('min'=>'1.5');
 		 parent::__construct();
 	 }
 	 
+	/* public function onCLickOption($type, $href = false)
+	 {
+	 	
+	 	return "return confirm('Confirmas el reseteo del modulo?');";
+	 }*/
+	 public function onCLickOption($type, $href = false)
+	 {
+
+	 	$confirm_reset = $this->l('Reseteando el modulo perderas todos los comentarios de la basename(
+	 		de datos, estás seguro?)');
+	 	$reset_callback = "return mymodcomments_reset('".addslashes($confirm_reset)."');";
+
+	 	$matchType = array(
+	 		'reset' => "return confirm('Confirmas el reseteo del modulo?');",
+	 		'delete' => "return confirm('Confirmas la eliminación del módulo?')",
+	 		'disable' => "return confirm('Confirmas deshabilitar el módulo?')",
+	 	);
+
+	 	if(isset($matchType[$type])) {
+	 		return $matchType[$type];
+	 	}
+	 	return '';
+	 }
 	 public function install() //instalamos y ponemos el hook en
 	{
 		 if(!parent::install())
@@ -26,7 +50,9 @@ class MyModComments extends Module
 
 		 if(!$this->registerHook('displayProductTabContent'))
 		 return false; //registerHOOK necesita el id del modulo, por eso se llama primero a install
-		 
+		  if(!$this->registerHook('displayBackOfficeHeader'))
+		 return false; 
+
 		Configuration::updateValue('MYMOD_GRADES','1');
 		Configuration::updateValue('MYMOD_COMMENTS','1');
 		 return true;
@@ -94,11 +120,15 @@ class MyModComments extends Module
 			 $id_product = Tools::getValue('id_product');
 			 $grade = Tools::getValue('grade');
 			 $comment = Tools::getValue('comment');
+			 $firstname = Tools::getValue('firstname');
+			 $lastname= Tools::getValue('comment');
 			 $insert = array(
 			 'id_product' => (int)$id_product,
 			 'grade' => (int)$grade,
 			 'comment' => pSQL($comment),
 			 'date_add' => date('Y-m-d H:i:s'),
+			 'firstname' => pSQL($firstname),
+			 'lastname' => pSQL($lastname),
 			 );
 			 Db::getInstance()->insert('mymod_comment', $insert);
 			$this->context->smarty->assign('new_comment_posted', 'true');
@@ -120,7 +150,7 @@ class MyModComments extends Module
 
 	public function assignProductTabContent() //para mostrar los comentarios
 	{
-		$this->context->controller->addCSS($this->_path.'views/css/star-rating.css', 'all');
+	$this->context->controller->addCSS($this->_path.'views/css/star-rating.css', 'all');
 	$this->context->controller->addJS($this->_path.'views/js/star-rating.js');
 	
 	 $enable_grades = Configuration::get('MYMOD_GRADES');
@@ -141,6 +171,13 @@ class MyModComments extends Module
 	 $this->processProductTabContent();
 	 $this->assignProductTabContent();
 	 return $this->display(__FILE__, 'displayProductTabContent.tpl');
+	}
+	public function hookDisplayBackOfficeHeader($params)//lanza el DisplayBackOfficeHeader.tpl para que se muestre la confirmacion de la accion del onclick
+	{
+	 if(Tools::getValue('controller') != 'AdminModules') 
+	 	return '';
+	 $this->context->smarty->assign('pc_base_dir', __PS_BASE_URI__.'modules/'.$this->name.'/');
+	 return $this->display(__FILE__,'displayBackOfficeHeader.tpl');
 	}
 	 
 }
