@@ -31,6 +31,22 @@ class MyModComments extends Module
 		Configuration::updateValue('MYMOD_COMMENTS','1');
 		 return true;
 	}
+
+	public function uninstall() //instalamos y ponemos el hook en
+	{
+		 if(!parent::uninstall())
+		 return false; //añade el modulo en la tabla ps9w_module de la tabla SQL, SINO NO SERA INSTALABLE
+		
+		 $sql_file= dirname(__FILE__).'/install/uninstall.sql';
+		if(!$this->loadSQLFile($sql_file)) 
+		return false;
+		 
+		Configuration::deleteByName('MYMOD_GRADES');
+		Configuration::deleteByName('MYMOD_COMMENTS');
+
+		 return true;
+	}
+
 	public function loadSQLFile($sql_file)
 	{
 
