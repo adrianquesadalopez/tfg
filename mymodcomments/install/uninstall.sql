@@ -1,0 +1,1 @@
+drop table `godsoffi_pres360`.`ps9w_mymod_comment`;

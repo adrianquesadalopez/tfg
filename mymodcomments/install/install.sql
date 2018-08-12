@@ -1,0 +1,1 @@
+create table if not exists `godsoffi_pres360`.`ps9w_mymod_comment`(`id_mymod_comment` int(11) not null auto_increment,`id_product` int(11) not null,`grade` int(1),`comment` text not null,`date_add` datetime not null,primary key (`id_mymod_comment`)) engine=InnoDB DEFAULT CHARSET=utf8 auto_increment=1;

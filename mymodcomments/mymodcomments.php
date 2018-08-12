@@ -17,12 +17,37 @@ class MyModComments extends Module
 	 
 	 public function install() //instalamos y ponemos el hook en
 	{
-		 parent::install(); //añade el modulo en la tabla ps9w_module de la tabla SQL, SINO NO SERA INSTALABLE
-		 $this->registerHook('displayProductTabContent'); //registerHOOK necesita el id del modulo, por eso se llama primero a install
+		 if(!parent::install())
+		 return false; //añade el modulo en la tabla ps9w_module de la tabla SQL, SINO NO SERA INSTALABLE
+		
+		 $sql_file= dirname(__FILE__).'/install/install.sql';
+		if(!$this->loadSQLFile($sql_file)) 
+		return false;
+
+		 if(!$this->registerHook('displayProductTabContent'))
+		 return false; //registerHOOK necesita el id del modulo, por eso se llama primero a install
+		 
+		Configuration::updateValue('MYMOD_GRADES','1');
+		Configuration::updateValue('MYMOD_COMMENTS','1');
 		 return true;
 	}
+	public function loadSQLFile($sql_file)
+	{
 
-	public function processConfiguration(){ //comprovamos si el boton de enviar ha sido clickado
+		$sql_content= file_get_contents($sql_file);
+		$sql_content= str_replace(`ps9w_`, _DB_PREFIX_, $sql_content);
+
+		$sql_requests= preg_split("/;\s*[\r\n]+/",$sql_content);
+
+		$result= true;
+		Foreach ($sql_requests as $request) {
+			if(!empty($request))
+				$result &= Db::getInstance()->execute(trim($request));
+		}
+		return $result;
+	}
+	public function processConfiguration()
+	{ //comprovamos si el boton de enviar ha sido clickado
 	 	if (Tools::isSubmit('mymod_pc_form')) //boton de enviar(submit) , issubmit mira si la clave 
 		{
 			$enable_grades = Tools::getValue('enable_grades'); //recupera la información de la clave pasada en el parametro
@@ -32,7 +57,7 @@ class MyModComments extends Module
 			$this->context->smarty->assign('confirmation', 'ok'); //mensaje de confirmacion
 		}
 	 	
-	 }
+	}
 	 public function assignConfiguration()// damos los valores de configuracion a las variables del .tpl
 	{
 		 $enable_grades = Configuration::get('MYMOD_GRADES');
@@ -40,7 +65,8 @@ class MyModComments extends Module
 		 $this->context->smarty->assign('enable_grades', $enable_grades);
 		 $this->context->smarty->assign('enable_comments',$enable_comments);
 	}
-	 public function getContent(){ //llama a las dos rutinas anteriores y muestra el getContent.tpl, es el unico metodo que prestashop llama cuando entramos en la configuracion de un modulo, el retorno sera el contenido mostrado en la pantalla
+	 public function getContent()
+	 { //llama a las dos rutinas anteriores y muestra el getContent.tpl, es el unico metodo que prestashop llama cuando entramos en la configuracion de un modulo, el retorno sera el contenido mostrado en la pantalla
 	 	$this->processConfiguration();
 	 	$this->assignConfiguration();
 	 	return $this->display(__FILE__,'getContent.tpl');
@@ -102,3 +128,4 @@ class MyModComments extends Module
 	}
 	 
 }
+?>

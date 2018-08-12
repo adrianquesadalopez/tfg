@@ -11,11 +11,11 @@
  <form action="" method="POST" id="comment-form">
  {if $enable_grades eq 1}
  <div class="form-group">
- <label for="grade">Grade:</label>
+ <label for="grade">{l s='Valoración:' mod='mymodcomments'}</label>
  <div class="row">
  <div class="col-xs-4">
  <input id="grade" name="grade" type="number"
- class="rating" min="0" max="5" step="1" data-size="sm" >
+ class="rating" min="0" max="5" step="1" data-size="sm">
  </select>
  </div>
  </div>
@@ -23,7 +23,7 @@
  {/if}
   {if $enable_comments eq 1}
  <div class="form-group">
- <label for="comment">Comment:</label>
+ <label for="comment">{l s='Comentario:' mod='mymodcomments'}</label>
  <textarea name="comment" id="comment" class="form-
  control"></textarea>
  </div>
