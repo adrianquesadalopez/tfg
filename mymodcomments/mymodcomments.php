@@ -6,7 +6,7 @@ class MyModComments extends Module
 	 {
 		 $this->name = 'mymodcomments';
 		 $this->tab = 'front_office_features';
-		 $this->version = '1.0';
+		 $this->version = '2.0';
 		 $this->bootstrap = true;
 		 $this->author = 'Adri Quesada';
 		 $this->displayName = $this->l('Comentarios y valoraciones de productos');
