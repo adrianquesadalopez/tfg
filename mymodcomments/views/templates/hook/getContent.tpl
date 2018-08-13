@@ -10,7 +10,7 @@
 	 </div>
 	 	<form action="" method="post">
 			 <div class="form-group clearfix">
-			 	 <label class="col-lg-3">Enable grades:</label>
+			 	 <label class="col-lg-3">{l s='Permitir valoración:' mod='mymodcomments'}</label>
 				 <div class="col-lg-9">
 				 <img src="../img/admin/enabled.gif" alt="" />
 				<input type="radio" id="enable_grades_1" name="enable_grades"
@@ -23,7 +23,7 @@
 				<label class="t" for="enable_grades_0">No</label>
 			 </div>
 			 <div class="form-group clearfix">
-				 <label class="col-lg-3">Enable comments:</label>
+				 <label class="col-lg-3">{l s='Permitir comentarios:' mod='mymodcomments'}</label>
 				 <div class="col-lg-9">
 				 <img src="../img/admin/enabled.gif" alt="" />
 				 <input type="radio" id="enable_comments_1"
