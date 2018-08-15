@@ -1,5 +1,7 @@
 <?php
 
+require_once(dirname(__FILE__).'/classes/MyModComment.php');
+
 class MyModComments extends Module
 {
 	public function __construct() //constructor con los datos de el modulo
@@ -198,6 +200,21 @@ class MyModComments extends Module
 	 $this->processProductTabContent();
 	} 
 	
+	public function getHookController($hook_name)
+	{
+		// Include the controller file
+		require_once(dirname(__FILE__).'/controllers/hook/'. $hook_name.'.php');
+
+		// Build dynamically the controller name
+		$controller_name = $this->name.$hook_name.'Controller';
+
+		// Instantiate controller
+		$controller = new $controller_name($this, __FILE__, $this->_path);
+
+		// Return the controller
+		return $controller;
+	}
+	
 	public function hookDisplayProductTabContent($params)//lanza el displayProductTabContent.tpl para que se muestre la posibilidad de poner reseñas en el front-end
 	{
 	 $this->processProductTabContent();
@@ -210,6 +227,18 @@ class MyModComments extends Module
 	 	return '';
 	 $this->context->smarty->assign('pc_base_dir', __PS_BASE_URI__.'modules/'.$this->name.'/');
 	 return $this->display(__FILE__,'displayBackOfficeHeader.tpl');
+	}
+
+	public function hookDisplayAdminProductsExtra($params)
+	{
+		$controller = $this->getHookController('displayAdminProductsExtra');
+		return $controller->run();
+	}
+
+	public function hookDisplayAdminCustomers($params)
+	{
+		$controller = $this->getHookController('displayAdminCustomers');
+		return $controller->run();
 	}
 	 
 }
