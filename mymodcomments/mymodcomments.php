@@ -48,6 +48,9 @@ class MyModComments extends Module
 		if(!$this->loadSQLFile($sql_file)) 
 		return false;
 
+	if (!$this->installTab('AdminCatalog', 'AdminMyModComments', 'MyMod Comments'))
+			return false;
+
 		 if(!$this->registerHook('displayProductTabContent'))
 		 return false; //registerHOOK necesita el id del modulo, por eso se llama primero a install
 		  if(!$this->registerHook('displayBackOfficeHeader'))
@@ -63,14 +66,43 @@ class MyModComments extends Module
 		 if(!parent::uninstall())
 		 return false; //añade el modulo en la tabla ps9w_module de la tabla SQL, SINO NO SERA INSTALABLE
 		
-		 $sql_file= dirname(__FILE__).'/install/uninstall.sql';
+		/* $sql_file= dirname(__FILE__).'/install/uninstall.sql';
 		if(!$this->loadSQLFile($sql_file)) 
-		return false;
+		return false;*/
 		 
+		 if (!$this->uninstallTab('AdminMyModComments'))
+			return false;
+
 		Configuration::deleteByName('MYMOD_GRADES');
 		Configuration::deleteByName('MYMOD_COMMENTS');
 
 		 return true;
+	}
+
+	public function installTab($parent, $class_name, $name)
+	{
+		// Create new admin tab
+		$tab = new Tab();
+		$tab->id_parent = (int)Tab::getIdFromClassName($parent);
+		$tab->name = array();
+		foreach (Language::getLanguages(true) as $lang)
+			$tab->name[$lang['id_lang']] = $name;
+		$tab->class_name = $class_name;
+		$tab->module = $this->name;
+		$tab->active = 1;
+		return $tab->add();
+	}
+
+	public function uninstallTab($class_name)
+	{
+		// Retrieve Tab ID
+		$id_tab = (int)Tab::getIdFromClassName($class_name);
+
+		// Load tab
+		$tab = new Tab((int)$id_tab);
+
+		// Delete it
+		return $tab->delete();
 	}
 
 	public function loadSQLFile($sql_file)
@@ -121,7 +153,7 @@ class MyModComments extends Module
 			 $grade = Tools::getValue('grade');
 			 $comment = Tools::getValue('comment');
 			 $firstname = Tools::getValue('firstname');
-			 $lastname= Tools::getValue('comment');
+			 $lastname= Tools::getValue('lastname');
 			 $insert = array(
 			 'id_product' => (int)$id_product,
 			 'grade' => (int)$grade,

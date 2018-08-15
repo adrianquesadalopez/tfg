@@ -11,6 +11,7 @@ class MyModCarrierGetContentController
 
 	public function testAPIConnection($mca_email, $mca_token)
 	{
+		//http://localhost/api/index.php?mca_email=adrian@gmail.com&mca_token=23c4380e50caf91f81793ac91d9bfde9&method=getRelayPoint&city=Edinburgh
 		$url = 'http://localhost/api/index.php';
 		$params = '?mca_email='.$mca_email.'&mca_token='.$mca_token.'&method=testConnection';
 		$result = json_decode(file_get_contents($url.$params), true);

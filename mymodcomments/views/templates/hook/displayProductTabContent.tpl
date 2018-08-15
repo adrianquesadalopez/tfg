@@ -13,7 +13,7 @@
  <label for="firstname">{l s='Nombre:' mod='mymodcomments'}</label>
  <div class="row">
  <div class="col-xs-4">
- <input id="name" name="name" type="text"
+ <input id="firstname" name="firstname" type="text"
  class="form-control">
  </div>
  </div>
