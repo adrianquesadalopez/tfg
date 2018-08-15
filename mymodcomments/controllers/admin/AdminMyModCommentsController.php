@@ -21,12 +21,12 @@ class AdminMyModCommentsController extends ModuleAdminController
 		$this->context = Context::getContext();
 		$this->context->controller = $this;
 		$this->fields_form = array(
-			'legend' => array('title' => $this->l('Add / Edit Comment')),
+			'legend' => array('title' => $this->l('Add / Edit Comment'),'image' => '../views/img/logo.gif'),
 			'input' => array(
 				array('type' => 'text', 'label' => $this->l('Nombre'), 'name' => 'firstname', 'size' => 30, 'required' => true),
 				array('type' => 'text', 'label' => $this->l('Apellido'), 'name' => 'lastname', 'size' => 30, 'required' => true),
-				/*array('type' => 'text', 'label' => $this->l('E-mail'), 'name' => 'email', 'size' => 30, 'required' => true),
-				array('type' => 'select', 'label' => $this->l('Producto'), 'name' => 'id_product', 'required' => true, 'default_value' => 1, 'options' => array('query' => Product::getProducts($this->context->cookie->id_lang, 1, 1000, 'name', 'ASC'), 'id' => 'id_product', 'name' => 'name')),*/
+				/*array('type' => 'text', 'label' => $this->l('E-mail'), 'name' => 'email', 'size' => 30, 'required' => true),*/
+				array('type' => 'select', 'label' => $this->l('Producto'), 'name' => 'id_product', 'required' => true, 'default_value' => 1, 'options' => array('query' => Product::getProducts($this->context->cookie->id_lang, 1, 1000, 'name', 'ASC'), 'id' => 'id_product', 'name' => 'name')),
 				array('type' => 'text', 'label' => $this->l('Valoración'), 'name' => 'grade', 'size' => 30, 'required' => true, 'desc' => $this->l('Grade must be between 1 and 5')),
 				array('type' => 'textarea', 'label' => $this->l('Comment'), 'name' => 'comment', 'cols' => 50, 'rows' => 5, 'required' => false),
 			),
@@ -67,8 +67,8 @@ class AdminMyModCommentsController extends ModuleAdminController
 
 		// Define meta and toolbar title
 		$this->meta_title = $this->l('Comments on Product');
-		//if (Tools::getIsset('viewmymod_comment'))
-		//	$this->meta_title = $this->l('View comment').' #'. Tools::getValue('id_mymod_comment');
+		if (Tools::getIsset('viewmymod_comment'))
+			$this->meta_title = $this->l('View comment').' #'. Tools::getValue('id_mymod_comment');
 		$this->toolbar_title[] = $this->meta_title;
 	}
 
@@ -79,7 +79,19 @@ class AdminMyModCommentsController extends ModuleAdminController
 
 	public function renderView()
 	{
-		
+		// Build delete link
+		$admin_delete_link = $this->context->link->getAdminLink('AdminMyModComments').'&deletemymod_comment&id_mymod_comment='.(int)$this->object->id;
+
+
+
+		// Add delete shortcut button to toolbar
+		$this->page_header_toolbar_btn['delete'] = array(
+			'href' => $admin_delete_link,
+			'desc' => $this->l('Delete it'),
+			'icon' => 'process-icon-delete',
+			'js' => "return confirm('".$this->l('Are you sure you want to delete it ?')."');",
+		);
+		$this->object->loadProductName();
 		$tpl = $this->context->smarty->createTemplate(dirname(__FILE__).'/../../views/templates/admin/view.tpl');
 		$tpl->assign('mymodcomment', $this->object);
 		return $tpl->fetch();

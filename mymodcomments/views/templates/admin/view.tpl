@@ -17,7 +17,7 @@
         </div>
         {*<div class="form-group clearfix">
             <label class="col-lg-3">{l s='Product:' mod='mymodcomments'}</label>
-            <div class="col-lg-9">{$mymodcomment->product_name} </div>
+            <div class="col-lg-9">{$mymodcomment->product_name}(#{$mymodcomment->id_product})</div>
         </div>*}
         <div class="form-group clearfix">
             <label class="col-lg-3">{l s='Grade:' mod='mymodcomments'}</label>
