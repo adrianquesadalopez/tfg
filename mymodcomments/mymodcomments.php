@@ -53,10 +53,10 @@ class MyModComments extends Module
 	if (!$this->installTab('AdminCatalog', 'AdminMyModComments', 'MyMod Comments'))
 			return false;
 
-		 if(!$this->registerHook('displayProductTabContent'))
-		 return false; //registerHOOK necesita el id del modulo, por eso se llama primero a install
-		  if(!$this->registerHook('displayBackOfficeHeader'))
-		 return false; 
+		 if (!$this->registerHook('displayProductTabContent') ||
+			!$this->registerHook('displayBackOfficeHeader') ||
+			!$this->registerHook('displayAdminProductsExtra'))
+			return false;
 
 		Configuration::updateValue('MYMOD_GRADES','1');
 		Configuration::updateValue('MYMOD_COMMENTS','1');
