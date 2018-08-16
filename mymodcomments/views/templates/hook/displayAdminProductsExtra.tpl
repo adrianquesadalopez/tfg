@@ -27,5 +27,18 @@
 			</tbody>
 		</table>
 
+		{if $nb_pages gt 1}
+            <ul class="pagination">
+            {for $count=1 to $nb_pages}
+                {if $page ne $count}
+                    <li><a class="comments-pagination-link" href="{$ajax_action_url}&configure=mymodcomments&ajax_hook=displayAdminProductsExtra&id_product={$smarty.get.id_product}&page={$count}"><span>{$count}</span></a></li>
+                {else}
+                    <li class="active current"><span><span>{$count}</span></span></li>
+                {/if}
+            {/for}
+            </ul>
+            <script type="text/javascript" src="{$pc_base_dir}views/js/mymodcomments-backoffice-product.js"></script>
+        {/if}
+
     </div>
 </div>

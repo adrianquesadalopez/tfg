@@ -140,13 +140,28 @@ class MyModComments extends Module
 		 $enable_comments = Configuration::get('MYMOD_COMMENTS');
 		 $this->context->smarty->assign('enable_grades', $enable_grades);
 		 $this->context->smarty->assign('enable_comments',$enable_comments);
-	}
+	}/*
 	 public function getContent()
 	 { //llama a las dos rutinas anteriores y muestra el getContent.tpl, es el unico metodo que prestashop llama cuando entramos en la configuracion de un modulo, el retorno sera el contenido mostrado en la pantalla
 	 	$this->processConfiguration();
 	 	$this->assignConfiguration();
 	 	return $this->display(__FILE__,'getContent.tpl');
-	 }
+	 }*/
+
+	 public function getContent()
+	{
+		$ajax_hook = Tools::getValue('ajax_hook');
+		if ($ajax_hook != '')
+		{
+			$ajax_method = 'hook'.ucfirst($ajax_hook);
+			if (method_exists($this, $ajax_method))
+				die($this->{$ajax_method}(array()));
+		}
+
+		$controller = $this->getHookController('getContent');
+		return $controller->run();
+	}
+	
 	public function processProductTabContent() //rutina para grabar comentarios en la bd
 	{
 		 if (Tools::isSubmit('mymod_pc_submit_comment'))

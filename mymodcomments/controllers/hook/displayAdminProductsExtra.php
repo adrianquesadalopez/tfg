@@ -17,7 +17,7 @@ class MyModCommentsDisplayAdminProductsExtraController
 
 		// Init
 		$page = 1;
-		$nb_per_page = 10;
+		$nb_per_page = 5;
 		$nb_pages = ceil($nb_comments / $nb_per_page);
 		if (Tools::getIsset('page'))
 			$page = (int)Tools::getValue('page');
