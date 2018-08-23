@@ -18,7 +18,7 @@ class MyModComment extends ObjectModel
 	public static $definition = array(
 		'table' => 'mymod_comment', 'primary' => 'id_mymod_comment', 'multilang' => false,
 		'fields' => array(
-			'id_product' => array('type' => self::TYPE_INT, 'validate' => 'isUnsignedId', 'required' => true),
+		   'id_product' => array('type' => self::TYPE_INT, 'validate' => 'isUnsignedId', 'required' => true),
 			'firstname' => array('type' => self::TYPE_STRING, 'validate' => 'isName', 'size' => 20),
 			'lastname' => array('type' => self::TYPE_STRING, 'validate' => 'isName', 'size' => 20),
 			//'email' => array('type' => self::TYPE_STRING, 'validate' => 'isEmail'),

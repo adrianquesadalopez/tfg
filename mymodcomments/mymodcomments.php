@@ -171,15 +171,22 @@ class MyModComments extends Module
 			 $comment = Tools::getValue('comment');
 			 $firstname = Tools::getValue('firstname');
 			 $lastname= Tools::getValue('lastname');
-			 $insert = array(
-			 'id_product' => (int)$id_product,
-			 'grade' => (int)$grade,
-			 'comment' => pSQL($comment),
-			 'date_add' => date('Y-m-d H:i:s'),
-			 'firstname' => pSQL($firstname),
-			 'lastname' => pSQL($lastname),
-			 );
-			 Db::getInstance()->insert('mymod_comment', $insert);
+
+			 if (!Validate::isName($firstname) || !Validate::isName($lastname) )
+			{
+				$this->context->smarty->assign('new_comment_posted', 'error');
+				return false;
+			}
+
+			$MyModComment = new MyModComment();
+			$MyModComment->id_product = (int)$id_product;
+			$MyModComment->firstname = $firstname;
+			$MyModComment->lastname = $lastname;
+			//$MyModComment->email = $email;
+			$MyModComment->grade = (int)$grade;
+			$MyModComment->comment = nl2br($comment);
+			$MyModComment->add();
+
 			$this->context->smarty->assign('new_comment_posted', 'true');
 
 		 }
@@ -190,6 +197,8 @@ class MyModComments extends Module
 		 mymodcomments.css', 'all');
 		$this->context->controller->addJS($this->_path.'views/js/
 		 mymodcomments.js');
+		$this->context->controller->addCSS($this->path.'views/css/mymodcomments.css', 'all');
+	$this->context->controller->addJS($this->path.'views/js/mymodcomments.js');
 		$this->context->smarty->assign('enable_grades', $enable_grades);
 		$this->context->smarty->assign('enable_comments',
 		 $enable_comments);
@@ -201,13 +210,14 @@ class MyModComments extends Module
 	{
 	$this->context->controller->addCSS($this->_path.'views/css/star-rating.css', 'all');
 	$this->context->controller->addJS($this->_path.'views/js/star-rating.js');
-	
+	$this->context->controller->addCSS($this->path.'views/css/mymodcomments.css', 'all');
+	$this->context->controller->addJS($this->path.'views/js/mymodcomments.js');
+
 	 $enable_grades = Configuration::get('MYMOD_GRADES');
 	 $enable_comments = Configuration::get('MYMOD_COMMENTS');
 	 $id_product = Tools::getValue('id_product');
-	 $comments = Db::getInstance()->executeS('SELECT * FROM
-	 '._DB_PREFIX_.'mymod_comment WHERE id_product =
-	 '.(int)$id_product);
+
+	 $comments = MyModComment::getProductComments($id_product, 0, 5);
 	 $this->context->smarty->assign('enable_grades', $enable_grades);
 	 $this->context->smarty->assign('enable_comments',
 	 $enable_comments);
